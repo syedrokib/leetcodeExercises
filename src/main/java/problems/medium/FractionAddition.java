@@ -26,12 +26,44 @@ class FractionAddition {
                 expression = expression.replace(negativeToken, "");
                 fractions.add(negativeToken);
             }
-
-
-//            System.out.println(token);
         }
 
-        System.out.println(fractions);
+        int commonDenominator = 1;
+
+        for (String fraction : fractions) {
+            final String denominator = fraction.split("[/]")[1];
+            commonDenominator *= Integer.parseInt(denominator);
+        }
+
+        List<String> newFractions = new ArrayList<>();
+
+        for (String fraction : fractions) {
+            String numerator = fraction.split("[/]")[0];
+            String denominator = fraction.split("[/]")[1];
+
+            int ratio = commonDenominator / Integer.valueOf(denominator);
+
+            if (numerator.startsWith("-")) {
+                newFractions.add("-" + Integer.parseInt(numerator.replace("-", "")) * ratio + "/" + commonDenominator);
+            } else {
+                newFractions.add(Integer.parseInt(numerator) * ratio + "/" + commonDenominator);
+            }
+        }
+
+
+        int sum = 0;
+        for (String fraction : newFractions) {
+
+            String numerator = fraction.split("[/]")[0];
+
+            if (numerator.startsWith("-")) sum -= Integer.parseInt(numerator.replace("-", ""));
+            else sum += Integer.parseInt(numerator);
+        }
+
+//        System.out.println(fractions);
+//        System.out.println(commonDenominator);
+        System.out.println(newFractions);
+        System.out.println(sum + "/" + commonDenominator);
 
 
 //        expression = expression.replace("+", "");

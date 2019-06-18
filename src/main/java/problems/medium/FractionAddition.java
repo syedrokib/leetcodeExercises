@@ -3,6 +3,8 @@ package problems.medium;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Float.max;
+
 //https://leetcode.com/problems/fraction-addition-and-subtraction/
 class FractionAddition {
     static String fractionAddition(String expression) {
@@ -60,17 +62,15 @@ class FractionAddition {
             else sum += Integer.parseInt(numerator);
         }
 
-//        System.out.println(fractions);
-//        System.out.println(commonDenominator);
-        System.out.println(newFractions);
-        System.out.println(sum + "/" + commonDenominator);
+        int reductionFactor = 1;
 
+        for (int i = 1; i <= max(commonDenominator, sum); i++)
+            if (commonDenominator % i == 0 && sum % i == 0) reductionFactor = i;
 
-//        expression = expression.replace("+", "");
-//        System.out.println(expression);
+        sum /= reductionFactor;
+        commonDenominator /= reductionFactor;
 
-
-        return null;
+        return (sum + "/" + commonDenominator);
     }
 
 }

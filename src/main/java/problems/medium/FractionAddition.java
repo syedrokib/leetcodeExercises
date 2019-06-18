@@ -2,6 +2,7 @@ package problems.medium;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.lang.Float.max;
@@ -17,22 +18,8 @@ class FractionAddition {
         if (!expression.startsWith(MINUS_SIGN)) expression = PLUS_SIGN + expression;
 
         List<String> fractions = new ArrayList<>();
-
-        for (String token : expression.split("[-+]")) {
-
-            if ("".equals(token)) continue;
-
-            final String positiveToken = PLUS_SIGN + token;
-            final String negativeToken = MINUS_SIGN + token;
-
-            if (expression.contains(positiveToken)) {
-                expression = expression.replaceFirst(Pattern.quote(positiveToken), "");
-                fractions.add(positiveToken.replace(PLUS_SIGN, ""));
-            } else {
-                expression = expression.replaceFirst(Pattern.quote(negativeToken), "");
-                fractions.add(negativeToken);
-            }
-        }
+        Matcher m = Pattern.compile("[-+][\\d]+[/][\\d]+").matcher(expression);
+        while (m.find()) fractions.add(m.group());
 
         int commonDenominator = 1;
 

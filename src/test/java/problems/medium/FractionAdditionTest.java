@@ -11,6 +11,8 @@ public class FractionAdditionTest {
     public void negativeAnswers() {
         assertEquals("-356/45", fractionAddition("-1/2+1/2-55/9-9/5"));
         assertEquals("-55/9", fractionAddition("9/5-1/2+1/2-55/9-9/5"));
+        assertEquals("-1401/280", fractionAddition("1/3-7/1+3/8+3/5+7/10+3/4-10/7-3/1+5/3+2/1"));
+
     }
 
     @Test

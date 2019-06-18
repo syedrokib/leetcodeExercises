@@ -26,7 +26,9 @@ class FractionAddition {
         }
 
         int gcd = 1;
-        for (Fraction fraction : fractions) gcd *= fraction.denominator;
+        for (Fraction fraction : fractions) {
+            gcd *= fraction.denominator;
+        }
 
         int numeratorSum = 0;
         for (Fraction fraction : fractions) {
@@ -34,13 +36,14 @@ class FractionAddition {
         }
 
         int reductionFactor = 1;
-        for (int i = 1; i <= max(gcd, numeratorSum); i++) {
-            if (gcd % i == 0 && numeratorSum % i == 0) reductionFactor = i;
-        }
+        for (int i = 1; i <= max(gcd, numeratorSum); i++)
+            if (isDivisible(gcd, i) && isDivisible(numeratorSum, i)) reductionFactor = i;
 
-        numeratorSum /= reductionFactor;
-        gcd /= reductionFactor;
-        return numeratorSum + "/" + gcd;
+        return (numeratorSum / reductionFactor) + "/" + (gcd / reductionFactor);
+    }
+
+    private static boolean isDivisible(int number, int dividend) {
+        return number % dividend == 0;
     }
 
     private static boolean startsWithPositiveFraction(String expression) {

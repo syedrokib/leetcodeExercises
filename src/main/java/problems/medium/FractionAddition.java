@@ -18,26 +18,19 @@ class FractionAddition {
 
         if (startsWithPositiveFraction(expression)) expression = PLUS_SIGN + expression;
 
-        List<int[]> fractions = new ArrayList<>();
+        List<Fraction> fractions = new ArrayList<>();
         Matcher m = Pattern.compile(FRACTION_PATTERN).matcher(expression);
         while (m.find()) {
             String[] tokens = m.group().split("/");
-            int numerator = Integer.parseInt(tokens[0]);
-            int denominator = Integer.parseInt(tokens[1]);
-            fractions.add(new int[]{numerator, denominator});
+            fractions.add(new Fraction(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1])));
         }
 
         int gcd = 1;
-        for (int[] fraction : fractions) {
-            int denominator = fraction[1];
-            gcd *= denominator;
-        }
+        for (Fraction fraction : fractions) gcd *= fraction.denominator;
 
         int numeratorSum = 0;
-        for (int[] fraction : fractions) {
-            int numerator = fraction[0];
-            int denominator = fraction[1];
-            numeratorSum += numerator * (gcd / denominator);
+        for (Fraction fraction : fractions) {
+            numeratorSum += fraction.numerator * (gcd / fraction.denominator);
         }
 
         int reductionFactor = 1;
@@ -52,6 +45,17 @@ class FractionAddition {
 
     private static boolean startsWithPositiveFraction(String expression) {
         return !expression.startsWith(MINUS_SIGN);
+    }
+
+    static class Fraction {
+
+        int numerator;
+        int denominator;
+
+        Fraction(int numerator, int denominator) {
+            this.numerator = numerator;
+            this.denominator = denominator;
+        }
     }
 
 }

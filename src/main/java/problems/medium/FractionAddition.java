@@ -2,14 +2,19 @@ package problems.medium;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static java.lang.Float.max;
 
 //https://leetcode.com/problems/fraction-addition-and-subtraction/
 class FractionAddition {
+
+    private static final String PLUS_SIGN = "+";
+    private static final String MINUS_SIGN = "-";
+
     static String fractionAddition(String expression) {
 
-        if (!expression.startsWith("-")) expression = "+" + expression;
+        if (!expression.startsWith(MINUS_SIGN)) expression = PLUS_SIGN + expression;
 
         List<String> fractions = new ArrayList<>();
 
@@ -17,14 +22,14 @@ class FractionAddition {
 
             if ("".equals(token)) continue;
 
-            final String positiveToken = "+" + token;
-            final String negativeToken = "-" + token;
+            final String positiveToken = PLUS_SIGN + token;
+            final String negativeToken = MINUS_SIGN + token;
 
             if (expression.contains(positiveToken)) {
-                expression = expression.replace(positiveToken, "");
-                fractions.add(positiveToken.replace("+", ""));
+                expression = expression.replaceFirst(Pattern.quote(positiveToken), "");
+                fractions.add(positiveToken.replace(PLUS_SIGN, ""));
             } else {
-                expression = expression.replace(negativeToken, "");
+                expression = expression.replaceFirst(Pattern.quote(negativeToken), "");
                 fractions.add(negativeToken);
             }
         }
@@ -44,8 +49,8 @@ class FractionAddition {
 
             int ratio = commonDenominator / Integer.valueOf(denominator);
 
-            if (numerator.startsWith("-")) {
-                unifiedFractions.add("-" + Integer.parseInt(numerator.replace("-", "")) * ratio + "/" + commonDenominator);
+            if (numerator.startsWith(MINUS_SIGN)) {
+                unifiedFractions.add(MINUS_SIGN + Integer.parseInt(numerator.replace(MINUS_SIGN, "")) * ratio + "/" + commonDenominator);
             } else {
                 unifiedFractions.add(Integer.parseInt(numerator) * ratio + "/" + commonDenominator);
             }
@@ -56,7 +61,7 @@ class FractionAddition {
 
             String numerator = fraction.split("[/]")[0];
 
-            if (numerator.startsWith("-")) numeratorSum -= Integer.parseInt(numerator.replace("-", ""));
+            if (numerator.startsWith(MINUS_SIGN)) numeratorSum -= Integer.parseInt(numerator.replace(MINUS_SIGN, ""));
             else numeratorSum += Integer.parseInt(numerator);
         }
 

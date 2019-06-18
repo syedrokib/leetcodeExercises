@@ -12,13 +12,14 @@ class FractionAddition {
 
     private static final String PLUS_SIGN = "+";
     private static final String MINUS_SIGN = "-";
+    private static final String FRACTION_PATTERN = "[-+][\\d]+[/][\\d]+";
 
     static String fractionAddition(String expression) {
 
         if (startsWithPositiveFraction(expression)) expression = PLUS_SIGN + expression;
 
         List<int[]> fractions = new ArrayList<>();
-        Matcher m = Pattern.compile("[-+][\\d]+[/][\\d]+").matcher(expression);
+        Matcher m = Pattern.compile(FRACTION_PATTERN).matcher(expression);
         while (m.find()) {
             String[] tokens = m.group().split("/");
             int numerator = Integer.parseInt(tokens[0]);
@@ -27,17 +28,17 @@ class FractionAddition {
         }
 
         int gcd = 1;
-        for (int[] fraction : fractions) gcd *= fraction[1];
+        for (int[] fraction : fractions) {
+            int denominator = fraction[1];
+            gcd *= denominator;
+        }
 
         int numeratorSum = 0;
         for (int[] fraction : fractions) {
-            fraction[0] *= gcd / fraction[1];
-            fraction[1] = gcd;
-            numeratorSum += fraction[0];
-
+            int numerator = fraction[0];
+            int denominator = fraction[1];
+            numeratorSum += numerator * (gcd / denominator);
         }
-
-//        for (int[] fraction : fractions) numeratorSum += fraction[0];
 
         int reductionFactor = 1;
         for (int i = 1; i <= max(gcd, numeratorSum); i++) {
@@ -46,7 +47,6 @@ class FractionAddition {
 
         numeratorSum /= reductionFactor;
         gcd /= reductionFactor;
-
         return numeratorSum + "/" + gcd;
     }
 

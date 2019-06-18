@@ -26,26 +26,28 @@ class FractionAddition {
             fractions.add(new int[]{numerator, denominator});
         }
 
-        int commonDenominator = 1;
-        for (int[] fraction : fractions) commonDenominator *= fraction[1];
-
-        for (int[] fraction : fractions) {
-            fraction[0] *= commonDenominator / fraction[1];
-            fraction[1] = commonDenominator;
-        }
+        int gcd = 1;
+        for (int[] fraction : fractions) gcd *= fraction[1];
 
         int numeratorSum = 0;
-        for (int[] fraction : fractions) numeratorSum += fraction[0];
+        for (int[] fraction : fractions) {
+            fraction[0] *= gcd / fraction[1];
+            fraction[1] = gcd;
+            numeratorSum += fraction[0];
+
+        }
+
+//        for (int[] fraction : fractions) numeratorSum += fraction[0];
 
         int reductionFactor = 1;
-        for (int i = 1; i <= max(commonDenominator, numeratorSum); i++) {
-            if (commonDenominator % i == 0 && numeratorSum % i == 0) reductionFactor = i;
+        for (int i = 1; i <= max(gcd, numeratorSum); i++) {
+            if (gcd % i == 0 && numeratorSum % i == 0) reductionFactor = i;
         }
 
         numeratorSum /= reductionFactor;
-        commonDenominator /= reductionFactor;
+        gcd /= reductionFactor;
 
-        return numeratorSum + "/" + commonDenominator;
+        return numeratorSum + "/" + gcd;
     }
 
     private static boolean startsWithPositiveFraction(String expression) {

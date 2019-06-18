@@ -24,8 +24,8 @@ public class FractionAdditionTest {
 
     @Test
     public void positiveAnswers() {
-//        assertEquals("1/1", fractionAddition("-0/6-0/44+0/444+5/5"));
-//        assertEquals("149/148", fractionAddition("3/444+5/5"));
+        assertEquals("1/1", fractionAddition("-0/6-0/44+0/444+5/5"));
+        assertEquals("149/148", fractionAddition("3/444+5/5"));
         assertEquals("2/1", fractionAddition("2/5+1/5+7/10+1/5+1/2"));
     }
 }

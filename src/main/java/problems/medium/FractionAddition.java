@@ -30,18 +30,12 @@ class FractionAddition {
         for (int[] fraction : fractions) commonDenominator *= fraction[1];
 
         for (int[] fraction : fractions) {
-
-            int ratio = commonDenominator / fraction[1];
-            fraction[0] *= ratio;
+            fraction[0] *= commonDenominator / fraction[1];
             fraction[1] = commonDenominator;
         }
 
         int numeratorSum = 0;
-        for (int[] fraction : fractions) {
-
-            numeratorSum += fraction[0];
-
-        }
+        for (int[] fraction : fractions) numeratorSum += fraction[0];
 
         int reductionFactor = 1;
         for (int i = 1; i <= max(commonDenominator, numeratorSum); i++) {

@@ -9,7 +9,6 @@ import static java.lang.Float.max;
 class FractionAddition {
     static String fractionAddition(String expression) {
 
-        //TODO: expression does not start with -
         if (!expression.startsWith("-")) expression = "+" + expression;
 
         List<String> fractions = new ArrayList<>();
@@ -37,7 +36,7 @@ class FractionAddition {
             commonDenominator *= Integer.parseInt(denominator);
         }
 
-        List<String> newFractions = new ArrayList<>();
+        List<String> unifiedFractions = new ArrayList<>();
 
         for (String fraction : fractions) {
             String numerator = fraction.split("[/]")[0];
@@ -46,31 +45,29 @@ class FractionAddition {
             int ratio = commonDenominator / Integer.valueOf(denominator);
 
             if (numerator.startsWith("-")) {
-                newFractions.add("-" + Integer.parseInt(numerator.replace("-", "")) * ratio + "/" + commonDenominator);
+                unifiedFractions.add("-" + Integer.parseInt(numerator.replace("-", "")) * ratio + "/" + commonDenominator);
             } else {
-                newFractions.add(Integer.parseInt(numerator) * ratio + "/" + commonDenominator);
+                unifiedFractions.add(Integer.parseInt(numerator) * ratio + "/" + commonDenominator);
             }
         }
 
-
-        int sum = 0;
-        for (String fraction : newFractions) {
+        int numeratorSum = 0;
+        for (String fraction : unifiedFractions) {
 
             String numerator = fraction.split("[/]")[0];
 
-            if (numerator.startsWith("-")) sum -= Integer.parseInt(numerator.replace("-", ""));
-            else sum += Integer.parseInt(numerator);
+            if (numerator.startsWith("-")) numeratorSum -= Integer.parseInt(numerator.replace("-", ""));
+            else numeratorSum += Integer.parseInt(numerator);
         }
 
         int reductionFactor = 1;
+        for (int i = 1; i <= max(commonDenominator, numeratorSum); i++)
+            if (commonDenominator % i == 0 && numeratorSum % i == 0) reductionFactor = i;
 
-        for (int i = 1; i <= max(commonDenominator, sum); i++)
-            if (commonDenominator % i == 0 && sum % i == 0) reductionFactor = i;
-
-        sum /= reductionFactor;
+        numeratorSum /= reductionFactor;
         commonDenominator /= reductionFactor;
 
-        return (sum + "/" + commonDenominator);
+        return numeratorSum + "/" + commonDenominator;
     }
 
 }

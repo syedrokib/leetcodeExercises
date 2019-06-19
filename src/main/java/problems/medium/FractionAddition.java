@@ -36,8 +36,9 @@ class FractionAddition {
         }
 
         int reductionFactor = 1;
-        for (int i = 1; i <= max(gcd, numeratorSum); i++)
+        for (int i = 1; i <= max(gcd, numeratorSum); i++) {
             if (isDivisible(gcd, i) && isDivisible(numeratorSum, i)) reductionFactor = i;
+        }
 
         return (numeratorSum / reductionFactor) + "/" + (gcd / reductionFactor);
     }
@@ -60,5 +61,4 @@ class FractionAddition {
             this.denominator = denominator;
         }
     }
-
 }

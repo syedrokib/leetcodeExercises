@@ -2,13 +2,13 @@ package problems.medium.threesumclosest;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
+import static problems.medium.threesumclosest.ThreeSumClosest.threeSumClosest;
 
 public class ThreeSumClosestTest {
 
     @Test
-    public void test() {
-        int[] nums = {-1, 2, 1, -4};
-        assertNull(ThreeSumClosest.threeSumClosest(nums, 0));
+    public void exactSum() {
+        assertEquals(2, threeSumClosest(new int[]{-1, 2, 1, -4}, 2));
     }
 }

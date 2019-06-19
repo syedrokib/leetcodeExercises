@@ -1,9 +1,9 @@
-package problems.medium;
+package problems.medium.fractionaddition;
 
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static problems.medium.FractionAddition.fractionAddition;
+import static problems.medium.fractionaddition.FractionAddition.fractionAddition;
 
 public class FractionAdditionTest {
 

@@ -1,4 +1,4 @@
-package problems.medium;
+package problems.medium.threesumclosest;
 
 import org.junit.Test;
 

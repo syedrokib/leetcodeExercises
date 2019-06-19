@@ -1,4 +1,4 @@
-package problems.medium;
+package problems.medium.fractionaddition;
 
 import java.util.ArrayList;
 import java.util.List;

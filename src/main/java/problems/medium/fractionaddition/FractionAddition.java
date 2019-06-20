@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 import static java.lang.Float.max;
 
@@ -16,49 +17,29 @@ class FractionAddition {
 
     static String fractionAddition(String expression) {
 
-        if (startsWithPositiveFraction(expression)) expression = PLUS_SIGN + expression;
-
-        List<Fraction> fractions = new ArrayList<>();
-        Matcher m = Pattern.compile(FRACTION_PATTERN).matcher(expression);
+        List<Integer> numerator = new ArrayList<>();
+        List<Integer> denominator = new ArrayList<>();
+        Matcher m = Pattern.compile(FRACTION_PATTERN).matcher(formatExpression(expression));
         while (m.find()) {
             String[] tokens = m.group().split("/");
-            fractions.add(new Fraction(Integer.parseInt(tokens[0]), Integer.parseInt(tokens[1])));
+            numerator.add(Integer.parseInt(tokens[0]));
+            denominator.add(Integer.parseInt(tokens[1]));
         }
 
-        int gcd = 1;
-        for (Fraction fraction : fractions) {
-            gcd *= fraction.denominator;
-        }
+        int gcd = denominator.stream().reduce(1, (a, b) -> a * b);
+        int sum = 0;
+        for (int i = 0; i < numerator.size(); i++) sum += numerator.get(i) * (gcd / denominator.get(i));
 
-        int numeratorSum = 0;
-        for (Fraction fraction : fractions) {
-            numeratorSum += fraction.numerator * (gcd / fraction.denominator);
-        }
 
-        int reductionFactor = 1;
-        for (int i = 1; i <= max(gcd, numeratorSum); i++) {
-            if (isDivisible(gcd, i) && isDivisible(numeratorSum, i)) reductionFactor = i;
-        }
+        int simplificationFactor = 1;
+        float max = max(gcd, sum);
+        for (int i = 1; i <= max; i++) if (gcd % i == 0 && sum % i == 0) simplificationFactor = i;
 
-        return (numeratorSum / reductionFactor) + "/" + (gcd / reductionFactor);
+        return (sum / simplificationFactor) + "/" + (gcd / simplificationFactor);
     }
 
-    private static boolean isDivisible(int number, int dividend) {
-        return number % dividend == 0;
+    private static String formatExpression(String expression) {
+        return expression.startsWith(MINUS_SIGN) ? expression : PLUS_SIGN + expression;
     }
 
-    private static boolean startsWithPositiveFraction(String expression) {
-        return !expression.startsWith(MINUS_SIGN);
-    }
-
-    static class Fraction {
-
-        int numerator;
-        int denominator;
-
-        Fraction(int numerator, int denominator) {
-            this.numerator = numerator;
-            this.denominator = denominator;
-        }
-    }
 }

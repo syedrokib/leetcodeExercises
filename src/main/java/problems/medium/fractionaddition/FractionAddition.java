@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.IntStream;
 
 import static java.lang.Float.max;
 
@@ -17,25 +16,37 @@ class FractionAddition {
 
     static String fractionAddition(String expression) {
 
-        List<Integer> numerator = new ArrayList<>();
-        List<Integer> denominator = new ArrayList<>();
+        List<Integer> numerators = new ArrayList<>();
+        List<Integer> denominators = new ArrayList<>();
         Matcher m = Pattern.compile(FRACTION_PATTERN).matcher(formatExpression(expression));
         while (m.find()) {
             String[] tokens = m.group().split("/");
-            numerator.add(Integer.parseInt(tokens[0]));
-            denominator.add(Integer.parseInt(tokens[1]));
+            numerators.add(Integer.parseInt(tokens[0]));
+            denominators.add(Integer.parseInt(tokens[1]));
         }
 
-        int gcd = denominator.stream().reduce(1, (a, b) -> a * b);
-        int sum = 0;
-        for (int i = 0; i < numerator.size(); i++) sum += numerator.get(i) * (gcd / denominator.get(i));
+        int gcd = gcd(denominators);
+        int sumOfNumerators = sumOfNumerators(numerators, denominators, gcd);
+        int simplificationFactor = simplificationFactor(gcd, sumOfNumerators);
 
+        return (sumOfNumerators / simplificationFactor) + "/" + (gcd / simplificationFactor);
+    }
 
+    private static int simplificationFactor(int gcd, int sumOfNumerators) {
+        float max = max(gcd, sumOfNumerators);
         int simplificationFactor = 1;
-        float max = max(gcd, sum);
-        for (int i = 1; i <= max; i++) if (gcd % i == 0 && sum % i == 0) simplificationFactor = i;
+        for (int i = 1; i <= max; i++) if (gcd % i == 0 && sumOfNumerators % i == 0) simplificationFactor = i;
+        return simplificationFactor;
+    }
 
-        return (sum / simplificationFactor) + "/" + (gcd / simplificationFactor);
+    private static int sumOfNumerators(List<Integer> numerators, List<Integer> denominators, int gcd) {
+        int sum = 0;
+        for (int i = 0; i < numerators.size(); i++) sum += numerators.get(i) * (gcd / denominators.get(i));
+        return sum;
+    }
+
+    private static Integer gcd(List<Integer> denominators) {
+        return denominators.stream().reduce(1, (a, b) -> a * b);
     }
 
     private static String formatExpression(String expression) {

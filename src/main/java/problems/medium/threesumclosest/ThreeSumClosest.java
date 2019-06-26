@@ -14,7 +14,7 @@ class ThreeSumClosest {
 
         for (int i = 0; i < nums.length; i++) {
             for (int j = i + 1; j < nums.length; j++) {
-                map.put(nums[i] + nums[j], new int[]{nums[i], nums[j]});
+                map.put(nums[i] + nums[j], new int[]{nums[i], nums[j], i, j});
             }
         }
 
@@ -26,15 +26,29 @@ class ThreeSumClosest {
             //one pass to see if nums has 3 numbers that add to target
             //indicates that there exists two numbers with sum as key
             //that can be added to i to form an array
-            if (map.containsKey(target - nums[i])) return target;
+            int thisnum = nums[i];
+            int diff = target - thisnum;
+            if (map.containsKey(diff)) {
+                int[] ints = map.get(diff);
+//                System.out.println();
+
+                // check for repetition
+                if (ints[2] != i && ints[3] != i) {
+//                    System.out.println();
+                    return target;
+                }
+            }
 
             for (Map.Entry<Integer, int[]> entry : map.entrySet()) {
 
-                int targetDiff = Math.abs(target - (i + entry.getKey()));
+                Integer thiskey = entry.getKey();
+                int[] value = entry.getValue();
 
-                if (targetDiff < min) {
+                int targetDiff = Math.abs(target - (thisnum + thiskey));
+
+                if (targetDiff < min && value[2] != i && value[3] != i) {
                     min = targetDiff;
-                    total = i + entry.getKey();
+                    total = thisnum + thiskey;
                 }
             }
         }

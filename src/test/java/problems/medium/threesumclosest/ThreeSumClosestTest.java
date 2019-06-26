@@ -9,6 +9,6 @@ public class ThreeSumClosestTest {
 
     @Test
     public void exactSum() {
-        assertEquals(2, threeSumClosest(new int[]{-1, 2, 1, -4}, 2));
+        assertEquals(2, threeSumClosest(new int[]{-1, 2, 1, -4}, 1));
     }
 }

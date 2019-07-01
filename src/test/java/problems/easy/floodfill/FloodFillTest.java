@@ -8,7 +8,6 @@ public class FloodFillTest {
 
     @Test
     public void floodFill() {
-        assertNull(new FloodFill().floodFill(new int[0][0], 0, 0, 0));
-        assertNull(new FloodFill().floodFill(new int[0][0], 0, 0, 0));
+        assertNull(new FloodFill().floodFill(new int[][]{{1, 1, 1}, {1, 1, 0}, {1, 0, 1}}, 1, 1, 2));
     }
 }

@@ -19,33 +19,30 @@ public class FloodFill {
     }
 
     private int[][] floodFillRecursively(int[][] image, int sr, int sc, int newColor, ArrayList<ArrayList<Boolean>> visitedPixels) {
-
-        // mark as visited
-        visitedPixels.get(sr).set(sc, true);
-
         int sourceColor = image[sr][sc];
-
-        // change the color of source pixel and continue checking in 4 directions
+        markAsVisited(sr, sc, visitedPixels);
         image[sr][sc] = newColor;
 
         int bottomRow = sr + 1;
         int topPixel = sr - 1;
-        int rightPixel = sc + 1;
-        int leftPixel = sc - 1;
+        int rightColumn = sc + 1;
+        int leftColumn = sc - 1;
 
-        boolean isRightFillRequired = (rightPixel < image[sc].length) && (image[sr][rightPixel] == sourceColor) && (!visitedPixels.get(sr).get(rightPixel));
-        boolean isLeftFillRequired = (leftPixel >= 0) && (image[sr][leftPixel] == sourceColor) && (!visitedPixels.get(sr).get(leftPixel));
+        boolean bottomFillRequired = isBottomFillRequired(bottomRow, image, sr, sc, sourceColor, visitedPixels);
+        boolean topFillRequired = isTopFillRequired(topPixel, image, sc, sourceColor, visitedPixels);
+        boolean rightFillRequired = isRightFillRequired(rightColumn, image, sr, sc, sourceColor, visitedPixels);
+        boolean leftFillRequired = isLeftFillRequired(leftColumn, image, sr, sourceColor, visitedPixels);
 
-        if (isBottomFillRequired(bottomRow, image, sr, sc, sourceColor, visitedPixels))
-            image = floodFillRecursively(image, bottomRow, sc, newColor, visitedPixels);
-
-        if (isTopFillRequired(topPixel, image, sc, sourceColor, visitedPixels))
-            image = floodFillRecursively(image, topPixel, sc, newColor, visitedPixels);
-
-        if (isRightFillRequired) image = floodFillRecursively(image, sr, rightPixel, newColor, visitedPixels);
-        if (isLeftFillRequired) image = floodFillRecursively(image, sr, leftPixel, newColor, visitedPixels);
+        if (bottomFillRequired) image = floodFillRecursively(image, bottomRow, sc, newColor, visitedPixels);
+        if (topFillRequired) image = floodFillRecursively(image, topPixel, sc, newColor, visitedPixels);
+        if (rightFillRequired) image = floodFillRecursively(image, sr, rightColumn, newColor, visitedPixels);
+        if (leftFillRequired) image = floodFillRecursively(image, sr, leftColumn, newColor, visitedPixels);
 
         return image;
+    }
+
+    private void markAsVisited(int sr, int sc, ArrayList<ArrayList<Boolean>> visitedPixels) {
+        visitedPixels.get(sr).set(sc, true);
     }
 
     private boolean isBottomFillRequired(int bottomRow, int[][] image, int sourceRow, int sourceColumn, int sourceColor,
@@ -60,10 +57,21 @@ public class FloodFill {
                 doesMatch(sourceColor, image[topRow][sourceColumn]);
     }
 
+    private boolean isRightFillRequired(int rightColumn, int[][] image, int sourceRow, int sourceColumn, int sourceColor,
+                                        ArrayList<ArrayList<Boolean>> visitedPixels) {
+        return isInBounds(rightColumn, image[sourceColumn]) && !isPixelVisited(visitedPixels, sourceRow, rightColumn)
+                && doesMatch(sourceColor, image[sourceRow][rightColumn]);
+    }
+
+    private boolean isLeftFillRequired(int leftColumn, int[][] image, int sourceRow, int sourceColor,
+                                       ArrayList<ArrayList<Boolean>> visitedPixels) {
+        return isInBounds(leftColumn) && !isPixelVisited(visitedPixels, sourceRow, leftColumn)
+                && doesMatch(sourceColor, image[sourceRow][leftColumn]);
+    }
+
     private boolean isInBounds(int index) {
         return index >= 0;
     }
-
 
     private Boolean isPixelVisited(ArrayList<ArrayList<Boolean>> visitedPixels, int row, int column) {
         return visitedPixels.get(row).get(column);

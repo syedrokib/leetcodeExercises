@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class FloodFill {
 
     public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
-        // check if starting pixel's color differs from newColor
         if (image[sr][sc] == newColor) return image;
 
         ArrayList<ArrayList<Boolean>> visitedPixels = new ArrayList<>();
@@ -18,7 +17,8 @@ public class FloodFill {
         return floodFillRecursively(image, sr, sc, newColor, visitedPixels);
     }
 
-    private int[][] floodFillRecursively(int[][] image, int sr, int sc, int newColor, ArrayList<ArrayList<Boolean>> visitedPixels) {
+    private int[][] floodFillRecursively(int[][] image, int sr, int sc, int newColor,
+                                         ArrayList<ArrayList<Boolean>> visitedPixels) {
         int sourceColor = image[sr][sc];
         markSourceAsVisited(sr, sc, visitedPixels);
         image[sr][sc] = newColor;
@@ -38,7 +38,7 @@ public class FloodFill {
 
     private boolean isBottomFillRequired(int bottomRow, int[][] image, int sourceRow, int sourceColumn, int sourceColor,
                                          ArrayList<ArrayList<Boolean>> visitedPixels) {
-        return isInBounds(bottomRow, image[sourceRow]) && !isPixelVisited(bottomRow, sourceColumn, visitedPixels)
+        return isInBounds(bottomRow, image.length) && !isPixelVisited(bottomRow, sourceColumn, visitedPixels)
                 && doesMatch(sourceColor, image[bottomRow][sourceColumn]);
     }
 
@@ -50,7 +50,7 @@ public class FloodFill {
 
     private boolean isRightFillRequired(int rightColumn, int[][] image, int sourceRow, int sourceColumn, int sourceColor,
                                         ArrayList<ArrayList<Boolean>> visitedPixels) {
-        return isInBounds(rightColumn, image[sourceColumn]) && !isPixelVisited(sourceRow, rightColumn, visitedPixels)
+        return isInBounds(rightColumn, image[sourceRow].length) && !isPixelVisited(sourceRow, rightColumn, visitedPixels)
                 && doesMatch(sourceColor, image[sourceRow][rightColumn]);
     }
 
@@ -60,8 +60,8 @@ public class FloodFill {
                 && doesMatch(sourceColor, image[sourceRow][leftColumn]);
     }
 
-    private boolean isInBounds(int index, int[] imageEntity) {
-        return index < imageEntity.length;
+    private boolean isInBounds(int index, int maxLength) {
+        return index < maxLength;
     }
 
     private boolean isInBounds(int index) {

@@ -1,36 +1,45 @@
 package problems.easy.floodfill;
 
+import java.util.ArrayList;
+
 public class FloodFill {
 
     public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
         // check if starting pixel's color differs from newColor
         if (image[sr][sc] == newColor) return image;
 
-        System.out.println(image[sr].length);
+        ArrayList<ArrayList<Boolean>> visitedPixels = new ArrayList<>();
+        for (int[] array : image) {
+            ArrayList<Boolean> visitedInitializer = new ArrayList<>();
+            for (int ignored : array) visitedInitializer.add(false);
+            visitedPixels.add(visitedInitializer);
+        }
 
+        return floodFillRecursively(image, sr, sc, newColor, visitedPixels);
+    }
+
+    private int[][] floodFillRecursively(int[][] image, int sr, int sc, int newColor, ArrayList<ArrayList<Boolean>> visitedPixels) {
+
+        // mark as visited
+        visitedPixels.get(sr).set(sc, true);
         // change the color of source pixel and continue checking in 4 directions
         image[sr][sc] = newColor;
 
-        if(hasPixelBelow(sr, image[sr]));
-        if (hasPixelAbove(sr));
-        if (hasPixelToTheRight(sc, image[sc]));
-        if (hasPixelToTheLeft(sc));
-        return null;
-    }
+        int bottomPixel = sr + 1;
+        int topPixel = sr - 1;
+        int rightPixel = sc + 1;
+        int leftPixel = sc - 1;
 
-    private boolean hasPixelToTheLeft(int sourceColumn) {
-        return sourceColumn - 1 >= 0;
-    }
+        boolean isBottomFillRequired = (bottomPixel < image[sr].length) && (image[bottomPixel][sc] != newColor) && (!visitedPixels.get(bottomPixel).get(sc));
+        boolean isTopFillRequired = (topPixel >= 0) && (image[topPixel][sc] != newColor) && (!visitedPixels.get(topPixel).get(sc));
+        boolean isRightFillRequired = (rightPixel < image[sc].length) && (image[sr][rightPixel] != newColor) && (!visitedPixels.get(sr).get(rightPixel));
+        boolean isLeftFillRequired = (leftPixel >= 0) && (image[sr][leftPixel] != newColor) && (!visitedPixels.get(sr).get(leftPixel));
 
-    private boolean hasPixelToTheRight(int sc, int[] ints) {
-        return sc + 1 < ints.length;
-    }
+        if (isBottomFillRequired) image = floodFillRecursively(image, bottomPixel, sc, newColor, visitedPixels);
+        if (isTopFillRequired) image = floodFillRecursively(image, topPixel, sc, newColor, visitedPixels);
+        if (isRightFillRequired) image = floodFillRecursively(image, sr, rightPixel, newColor, visitedPixels);
+        if (isLeftFillRequired) image = floodFillRecursively(image, sr, leftPixel, newColor, visitedPixels);
 
-    private boolean hasPixelAbove(int sourceRow) {
-        return sourceRow - 1 >= 0;
-    }
-
-    private boolean hasPixelBelow(int sourceRow, int[] image) {
-        return sourceRow + 1 < image.length;
+        return image;
     }
 }

@@ -38,15 +38,26 @@ public class IslandPerimeter {
 
         //check bounds && check for node existence && check for not visited
 
+        int leftColumnIndex = startingColumn - 1;
+        int rightColumnIndex = startingColumn + 1;
+        int topRowIndex = startingRow - 1;
+        int bottomRowIndex = startingRow + 1;
 
-        boolean hasLeft = (startingColumn - 1 >= 0) && (!visitedGrid[startingRow][startingColumn - 1]) && (grid[startingRow][startingColumn - 1] == 1);
-        boolean hasRight = (startingColumn + 1 < grid[0].length) && (!visitedGrid[startingRow][startingColumn + 1]) && (grid[startingRow][startingColumn + 1] == 1);
-        boolean hasTop = (startingRow - 1 >= 0) && (!visitedGrid[startingRow - 1][startingColumn]) && (grid[startingRow - 1][startingColumn] == 1);
-        boolean hasBottom = (startingRow + 1 < grid.length) && (!visitedGrid[startingRow - 1][startingColumn]) && (grid[startingRow - 1][startingColumn] == 1);
+        boolean hasLeft = (leftColumnIndex >= 0) && (!visitedGrid[startingRow][leftColumnIndex]) && (grid[startingRow][leftColumnIndex] == 1);
+        boolean hasRight = (rightColumnIndex < grid[0].length) && (!visitedGrid[startingRow][rightColumnIndex]) && (grid[startingRow][rightColumnIndex] == 1);
+        boolean hasTop = (topRowIndex >= 0) && (!visitedGrid[topRowIndex][startingColumn]) && (grid[topRowIndex][startingColumn] == 1);
+        boolean hasBottom = (bottomRowIndex < grid.length) && (!visitedGrid[bottomRowIndex][startingColumn]) && (grid[bottomRowIndex][startingColumn] == 1);
 
-        if (hasLeft) totalPerimeter = findPerimeter(grid, startingRow, startingColumn - 1, 2 + totalPerimeter, visitedGrid);
+        if (hasLeft)
+            totalPerimeter = findPerimeter(grid, startingRow, leftColumnIndex, 2 + totalPerimeter, visitedGrid);
+        if (hasRight)
+            totalPerimeter = findPerimeter(grid, startingRow, rightColumnIndex, 2 + totalPerimeter, visitedGrid);
+        if (hasTop)
+            totalPerimeter = findPerimeter(grid, topRowIndex, startingColumn, 2 + totalPerimeter, visitedGrid);
+        if (hasBottom)
+            totalPerimeter = findPerimeter(grid, bottomRowIndex, startingColumn, 2 + totalPerimeter, visitedGrid);
 
-        return 0;
+        return totalPerimeter;
     }
 
 }

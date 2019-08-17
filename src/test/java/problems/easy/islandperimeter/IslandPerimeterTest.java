@@ -10,5 +10,8 @@ public class IslandPerimeterTest {
     @Test
     public void islandPerimeter() {
         assertEquals(16, i.islandPerimeter(new int[][]{{0, 1, 0, 0}, {1, 1, 1, 0}, {0, 1, 0, 0}, {1, 1, 0, 0}}));
+        assertEquals(8, i.islandPerimeter(new int[][]{{1,1}, {1, 1}}));
 }
 }
+
+//[[1,1],[1,1]]

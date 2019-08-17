@@ -4,27 +4,48 @@ public class IslandPerimeter {
 
 
     public int islandPerimeter(int[][] grid) {
+        if (grid == null) return 0;
 
         int total = 0;
+        int numberOfRows = grid.length;
+        int numberOfColumns = grid[0].length;
 
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[0].length; j++) {
-                if (grid[i][j] == 1) {
-                    total += findPerimeter(grid, i, j);
-                }
+        for (int row = 0; row < numberOfRows; row++)
+            for (int column = 0; column < numberOfColumns; column++)
+                if (doesLandExist(grid, row, column))
+                    total += findPerimeter(grid, row, column);
 
-            }
-        }
         return total;
     }
 
 
-    private int findPerimeter(int[][] grid, int row, int col) {
+    private int findPerimeter(int[][] grid, int staringRow, int startingColumn) {
         int count = 0;
-        if (col - 1 < 0 || grid[row][col - 1] == 0) count++;
-        if (col + 1 >= grid[0].length || grid[row][col + 1] == 0) count++;
-        if (row - 1 < 0 || grid[row - 1][col] == 0) count++;
-        if (row + 1 >= grid.length || grid[row + 1][col] == 0) count++;
+        if (countLeft(grid, staringRow, startingColumn - 1)) count++;
+        if (countRight(grid, staringRow, startingColumn + 1)) count++;
+        if (countTop(grid, staringRow - 1, startingColumn)) count++;
+        if (countBottom(grid, staringRow + 1, startingColumn)) count++;
         return count;
     }
+
+    private boolean countLeft(int[][] grid, int staringRow, int leftOfStaringColumn) {
+        return leftOfStaringColumn < 0 || !doesLandExist(grid, staringRow, leftOfStaringColumn);
+    }
+
+    private boolean countRight(int[][] grid, int staringRow, int rightOfStartingColumn) {
+        return rightOfStartingColumn >= grid[0].length || !doesLandExist(grid, staringRow, rightOfStartingColumn);
+    }
+
+    private boolean countTop(int[][] grid, int rowAboveStartingRow, int startingColumn) {
+        return rowAboveStartingRow < 0 || !doesLandExist(grid, rowAboveStartingRow, startingColumn);
+    }
+
+    private boolean countBottom(int[][] grid, int rowBelowStartingRow, int startingColumn) {
+        return rowBelowStartingRow >= grid.length || !doesLandExist(grid, rowBelowStartingRow, startingColumn);
+    }
+
+    private boolean doesLandExist(int[][] grid, int row, int column) {
+        return grid[row][column] == 1;
+    }
+
 }

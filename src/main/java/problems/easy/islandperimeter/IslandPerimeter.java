@@ -2,7 +2,6 @@ package problems.easy.islandperimeter;
 
 public class IslandPerimeter {
 
-
     public int islandPerimeter(int[][] grid) {
         if (grid == null) return 0;
 
@@ -47,5 +46,4 @@ public class IslandPerimeter {
     private boolean doesLandExist(int[][] grid, int row, int column) {
         return grid[row][column] == 1;
     }
-
 }

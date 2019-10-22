@@ -12,7 +12,7 @@ class FractionAddition {
 
     private static final String PLUS_SIGN = "+";
     private static final String MINUS_SIGN = "-";
-    private static final String FRACTION_PATTERN = "[-+][\\d]+[/][\\d]+";
+    private static final String FRACTION_PATTERN = "[sr][a-z]+|pit";
 
     static String fractionAddition(String expression) {
 

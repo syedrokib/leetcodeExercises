@@ -12,7 +12,7 @@ class FractionAddition {
 
     private static final String PLUS_SIGN = "+";
     private static final String MINUS_SIGN = "-";
-    private static final String FRACTION_PATTERN = "[sr][a-z]+|pit";
+    private static final String FRACTION_PATTERN = "^([$]?|[@]{0,2})([a-zA-Z_]+[0-9a-zA-Z_]*)([^?!=])$";
 
     static String fractionAddition(String expression) {
 
